@@ -1,50 +1,58 @@
-import { use, useState } from "react";
+import React, { useState, useEffect } from 'react';
+import './App.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
-  function App() {
-    const [nome, setNome] = useState("");
-    const [email, setEmail] = useState("");
-    const [idade, setIdade] =useState("");
-    
-    const [user, setUser] = useState({})
+const App = () => {
+  const [tasks, setTasks] = useState(() => {
+    return JSON.parse(localStorage.getItem("@listaTarefas")) || [];
+  });
+  const [inputValue, setInputValue] = useState("");
 
-    function handelRegister(e){
-      e.preventDefault();
-      alert("usuario registrado com sucesso")
-      setUser({
-        nome:nome,
-        idade:idade,
-        email:email
-      })
-      
+  useEffect(() => {
+    localStorage.setItem("@listaTarefas", JSON.stringify(tasks));
+  }, [tasks]);
+
+  const addTask = () => {
+    if (inputValue.trim() === "") {
+      alert("Digite uma tarefa!");
+      return;
     }
-    
-    return (
-      <div>
-        <h1>Cadastrando usuario</h1>
-        <form onSubmit={handelRegister}>
-        <label> Nome:</label><br/>
-        <input placeholder="Digite seu nome" value={nome} onChange={(e)=> setNome(e.target.value)}/>
-        <br />
+    setTasks([...tasks, inputValue]);
+    setInputValue("");
+  };
 
-        <label> Email:</label><br/>
-        <input placeholder="Digite seu email" value={email} onChange={(e) => setEmail(e.target.value)}/>
-        <br />
+  const deleteTask = (index) => {
+    const newTasks = tasks.filter((_, i) => i !== index);
+    setTasks(newTasks);
+  };
 
-        <label> Idade:</label><br/>
-        <input placeholder="Digite sua idade" value={idade} onChange={(e) => setIdade(e.target.value)}/>
-        <br />
-
-        <button type="submit">Registrar</button>
-        </form>
-
-        <br /><br />
-        <div>
-        <span>Bem vindo {user.nome} </span><br />
-        <span>{user.idade} anos </span><br />
-        <span>email: {user.email}</span><br />
-
-        </div>
+  return (
+    <div className="wrapper" id="app">
+      <h1>Lista de Tarefas</h1>
+      <div id="entrada">
+        <input
+          className="Entrada"
+          type="text"
+          placeholder="Digite uma tarefa"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+        />
+        <button className="botao" onClick={addTask}>
+          <i className="fas fa-plus"></i>
+        </button>
       </div>
-    );
-  }
-  export default App;
+      <ul>
+        {tasks.map((task, index) => (
+          <li key={index}>
+            {task}
+            <a href="#" onClick={() => deleteTask(index)}>
+              <i className="fa fa-trash"></i>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default App;
