@@ -15,4 +15,4 @@ Esta aplicação permite que os usuários gerenciem suas tarefas diárias de for
 
 ## 📸 Captura de Tela
 
-![Captura da aplicação](https://i.ibb.co/k38FrDJ/print.png))
+![Captura da aplicação](https://i.ibb.co/k38FrDJ/print.png)
